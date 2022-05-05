@@ -97,19 +97,24 @@ function App() {
 
   return (
     <div className="App">
-      {error && <p className='error'>{error.message}</p>}
-      {success && <p className='success'>{success.message}</p>}
-      <h2>{balance / 10**18} eth</h2>
-      <div className='wallet__flex'>
-        <div className="walletG">
-          <h3>Send Ether</h3>
-          <input type="text" placeholder="Amount in ETH" onChange={changeAmountSend} />
-          <button onClick={transfer}>Send</button>
+      <div className="container">
+      <div className="logo">
+          <i className="fab fa-ethereum"></i>
         </div>
-        <div className="walletD">
-          <h3>Withdraw Ether</h3>
-          <input type="text" placeholder="Amount in ETH" onChange={changeAmountWithdraw} />
-          <button onClick={withdraw}>Withdraw</button>
+        {error && <p className='error'>{error}</p>}
+        {success && <p className='success'>{success}</p>}
+        <h2>{balance / 10**18} eth</h2>
+        <div className='wallet__flex'>
+          <div className="walletG">
+            <h3>Send Ether</h3>
+            <input type="text" placeholder="Amount in ETH" onChange={changeAmountSend} />
+            <button onClick={transfer}>Send</button>
+          </div>
+          <div className="walletD">
+            <h3>Withdraw Ether</h3>
+            <input type="text" placeholder="Amount in ETH" onChange={changeAmountWithdraw} />
+            <button onClick={withdraw}>Withdraw</button>
+          </div>
         </div>
       </div>
     </div>
