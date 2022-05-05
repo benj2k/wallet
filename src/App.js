@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { ethers } from 'ethers';
 import Wallet from './artifacts/contracts/Wallet.sol/Wallet.json';
 import './App.css';
-import { TransactionDescription } from 'ethers/lib/utils';
+//import { transaction } from 'ethers/lib/utils';
 
 let WalletAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 
@@ -39,6 +39,10 @@ function App() {
     setAmountSend(e.target.value);
   }
 
+  function changeAmountWithdraw(e) {
+    setAmountWithdraw(e.target.value);
+  }
+
   async function transfer() {
     if (!amountSend) {
       return;
@@ -59,10 +63,34 @@ function App() {
         await transtraction.wait();
         setAmountSend('');
         getBalance();
-        setSuccess('Successfuly sent your money into the wallet !');        console.log("ok1")
-
+        setSuccess('Successfuly sent your money into the wallet !'); 
       } catch (err) {
         setError("Error while transfer");
+      }
+    }
+  }
+
+  async function withdraw() {
+    if (!amountWithdraw) {
+      return;
+    }
+    setError('');
+    setSuccess('');
+    if (typeof window.ethereum !== 'undefined') { // check if user is connected with metamask
+      console.log("ok")
+      const accounts = await window.ethereum.request({method: 'eth_requestAccounts'});
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(WalletAddress, Wallet.abi, signer);
+      try {
+        const withdraw = await contract.withdrawMoney(accounts[0], ethers.utils.parseEther(amountWithdraw));
+        await withdraw.wait();
+        setAmountWithdraw('');
+        getBalance();
+        setSuccess('Successfuly withdrawn money into the wallet !'); 
+
+      } catch (err) {
+        setError("Error while withdraw");
       }
     }
   }
@@ -77,6 +105,11 @@ function App() {
           <h3>Send Ether</h3>
           <input type="text" placeholder="Amount in ETH" onChange={changeAmountSend} />
           <button onClick={transfer}>Send</button>
+        </div>
+        <div className="walletD">
+          <h3>Withdraw Ether</h3>
+          <input type="text" placeholder="Amount in ETH" onChange={changeAmountWithdraw} />
+          <button onClick={withdraw}>Withdraw</button>
         </div>
       </div>
     </div>
