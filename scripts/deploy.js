@@ -15,7 +15,7 @@ async function main() {
 
   // We get the contract to deploy
   const Wallet = await hre.ethers.getContractFactory("Wallet");
-  const wallet = await Wallet.deploy("Hello, Hardhat!");
+  const wallet = await Wallet.deploy();
 
   await wallet.deployed();
 
